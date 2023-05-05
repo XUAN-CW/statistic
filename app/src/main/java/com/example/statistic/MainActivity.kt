@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun addItem() {
         val now = LocalDateTime.now()
-        items.add(now.toString())
+        items.add(0,now.toString())
         adapter.notifyDataSetChanged()
         Toast.makeText(applicationContext, now.toString(), Toast.LENGTH_SHORT).show()
     }
