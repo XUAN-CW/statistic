@@ -5,13 +5,24 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.os.Bundle
+import android.os.Environment
+import android.os.Environment.DIRECTORY_DOCUMENTS
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.ListView
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.google.common.io.Files
+import com.google.gson.Gson
+import java.io.File
+import java.nio.charset.Charset
 import java.time.LocalDateTime
+import kotlin.math.log
 
 class MainActivity : AppCompatActivity() {
 
@@ -64,18 +75,25 @@ class MainActivity : AppCompatActivity() {
         adapter.notifyDataSetChanged()
     }
 
+    private val fileToSave = File(Environment.getExternalStoragePublicDirectory(DIRECTORY_DOCUMENTS), "items.json")
+
     private fun saveItemsToDisk() {
-        val prefs = getPreferences(Context.MODE_PRIVATE)
-        with(prefs.edit()) {
-            putStringSet("items", items.toSet())
-            apply()
-        }
+        val gson = Gson()
+        Files.asCharSink(fileToSave, Charset.defaultCharset()).write(gson.toJson(items))
     }
 
+
     private fun loadItemsFromDisk(): MutableList<String> {
-        val prefs = getPreferences(Context.MODE_PRIVATE)
-        val itemSet = prefs.getStringSet("items", emptySet()) ?: emptySet()
-        return itemSet.toMutableList()
+        Log.i("fileToSave",fileToSave.absolutePath)
+        if(!fileToSave.exists()){
+            return emptySet<String>().toMutableList()
+        }
+        val gson = Gson()
+        // Read the JSON string from file
+        val jsonFromFile = Files.asCharSource(fileToSave, Charset.defaultCharset()).read()
+        // Convert the JSON string back to a list of students
+        val itemsFromFile = gson.fromJson(jsonFromFile, Array<String>::class.java).toSet()
+        return itemsFromFile.toMutableList()
     }
 
     private fun copyItemsToClipboard() {
