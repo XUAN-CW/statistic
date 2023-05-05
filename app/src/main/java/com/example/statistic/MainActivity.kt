@@ -50,16 +50,7 @@ class MainActivity : AppCompatActivity() {
             copyItemsToClipboard()
         }
 
-        listView.setOnItemClickListener { parent, view, position, id ->
-            deleteItem(position)
-            saveItemsToDisk()
-        }
 
-        listView.setOnItemLongClickListener { parent, view, position, id ->
-            deleteItem(position)
-            saveItemsToDisk()
-            true
-        }
     }
 
     private fun addItem() {
