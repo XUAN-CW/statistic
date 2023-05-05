@@ -1,6 +1,7 @@
 package com.example.statistic
 
 
+import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -11,10 +12,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.ListView
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.common.io.Files
@@ -22,7 +20,6 @@ import com.google.gson.Gson
 import java.io.File
 import java.nio.charset.Charset
 import java.time.LocalDateTime
-import kotlin.math.log
 
 class MainActivity : AppCompatActivity() {
 
@@ -65,9 +62,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("ShowToast")
     private fun addItem() {
-        items.add(LocalDateTime.now().toString())
+        var now = LocalDateTime.now()
+        items.add(now.toString())
         adapter.notifyDataSetChanged()
+        val toast = Toast.makeText(applicationContext, now.toString(), Toast.LENGTH_SHORT)
     }
 
     private fun deleteItem(position: Int) {
@@ -93,6 +93,7 @@ class MainActivity : AppCompatActivity() {
         val jsonFromFile = Files.asCharSource(fileToSave, Charset.defaultCharset()).read()
         // Convert the JSON string back to a list of students
         val itemsFromFile = gson.fromJson(jsonFromFile, Array<String>::class.java).toSet()
+        itemsFromFile.stream().sorted()
         return itemsFromFile.toMutableList()
     }
 
