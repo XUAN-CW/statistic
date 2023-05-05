@@ -62,12 +62,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    @SuppressLint("ShowToast")
     private fun addItem() {
-        var now = LocalDateTime.now()
+        val now = LocalDateTime.now()
         items.add(now.toString())
         adapter.notifyDataSetChanged()
-        val toast = Toast.makeText(applicationContext, now.toString(), Toast.LENGTH_SHORT)
+        Toast.makeText(applicationContext, now.toString(), Toast.LENGTH_SHORT).show()
     }
 
     private fun deleteItem(position: Int) {
@@ -89,9 +88,7 @@ class MainActivity : AppCompatActivity() {
             return emptySet<String>().toMutableList()
         }
         val gson = Gson()
-        // Read the JSON string from file
         val jsonFromFile = Files.asCharSource(fileToSave, Charset.defaultCharset()).read()
-        // Convert the JSON string back to a list of students
         val itemsFromFile = gson.fromJson(jsonFromFile, Array<String>::class.java).toSet()
         itemsFromFile.stream().sorted()
         return itemsFromFile.toMutableList()
