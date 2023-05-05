@@ -7,7 +7,6 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.os.Bundle
 import android.os.Environment
-import android.os.Environment.DIRECTORY_DOCUMENTS
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -65,7 +64,7 @@ class MainActivity : AppCompatActivity() {
         adapter.notifyDataSetChanged()
     }
 
-    private val fileToSave = File(Environment.getExternalStoragePublicDirectory(DIRECTORY_DOCUMENTS), "items.json")
+    private val fileToSave = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "items.json")
 
     private fun saveItemsToDisk() {
         val gson = Gson()
